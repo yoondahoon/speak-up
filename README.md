@@ -1,6 +1,6 @@
 # speak-up
 
-> Formerly `read-aloud`. Old links redirect here.
+> Formerly `read-aloud`. Old links redirect here. Already using it? See [Upgrading from read-aloud](#upgrading-from-read-aloud).
 
 **Talk to Claude Code and hear it answer, for free.** 🎙️ → 🤖 → 🔊
 
@@ -44,6 +44,24 @@ In Claude Code:
 ```
 
 Restart Claude Code. The next reply will be read aloud.
+
+## Upgrading from read-aloud
+
+The plugin was renamed, so Claude Code will not switch over by itself. Run this once in a terminal:
+
+```
+claude plugin uninstall read-aloud@read-aloud
+claude plugin marketplace remove read-aloud
+claude plugin marketplace add yoondahoon/speak-up
+claude plugin install speak-up@speak-up
+```
+
+Then restart Claude Code.
+
+- **Your settings stay**: `READ_ALOUD_*` environment variables and `~/.claude/read-aloud/config.json` keep working. Nothing to change.
+- **New command name**: `/read-aloud:speak` is now `/speak-up:speak`.
+- **Codex**: the existing hook keeps working because it points to your cloned folder. To get updates, run `git pull`
+  in that folder. Do not rename or move the folder, or you will have to run `install-codex` and **Trust** it again.
 
 ## Install for OpenAI Codex
 
@@ -212,6 +230,17 @@ Claude Code와 **말로 대화하는** 무료 플러그인이에요. 말로 묻�
 ```
 
 **Codex에서 쓰기**: `git clone https://github.com/yoondahoon/speak-up` 후 `python speak-up/speak.py install-codex`를 실행하고, Codex를 열어 **"Hooks need review"**가 나오면 **Trust**를 누르세요.
+
+**read-aloud에서 옮겨오기**: 이름이 바뀌어서 자동으로 넘어가지 않아요. 터미널에서 한 번만 실행하고 Claude Code를 다시 켜세요.
+
+```
+claude plugin uninstall read-aloud@read-aloud
+claude plugin marketplace remove read-aloud
+claude plugin marketplace add yoondahoon/speak-up
+claude plugin install speak-up@speak-up
+```
+
+설정(`READ_ALOUD_*`, `~/.claude/read-aloud/config.json`)은 그대로 쓰여요. 명령어만 `/read-aloud:speak` → `/speak-up:speak`로 바뀌어요. Codex는 받아둔 폴더에서 `git pull`만 하면 되고, 폴더 이름이나 위치는 바꾸지 마세요.
 
 **끄기/켜기**: `/speak-up:speak off`, `/speak-up:speak on`
 
