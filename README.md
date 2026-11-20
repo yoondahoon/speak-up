@@ -7,12 +7,23 @@
 This plugin reads every reply out loud. Works with **Claude Code** and **OpenAI Codex** (CLI and app). Combine it with Claude Code's built-in `/voice`
 dictation and you get a hands-free voice conversation with no extra cost.
 
+## ✨ What makes speak-up different
+
+### ✋ Press any key to stop
+Start typing and Claude stops talking, right away. No hotkey to remember, no command to type.
+Just press any key while it is speaking (Windows, edge voice). Sending a new message also cuts the speech.
+
+### 🌏 Speaks your language automatically
+Every reply is checked for its language, and a matching native voice reads it: Korean, Japanese,
+Chinese, Arabic, Hindi, Thai, Russian, Spanish, French, German, Vietnamese: 40+ languages detected
+automatically, 70+ with a language hint (`READ_ALOUD_LANG`).
+Switch languages mid-conversation and the voice follows. Nothing to configure.
+
+## Features
+
 - 💸 **Free and offline**: uses the voices already built into your OS. No API key, no account.
-- 🌏 **Any language**: detects the reply's language (Korean, Japanese, Chinese, Arabic, Hindi,
-  Thai, Russian, Spanish, French, German, Vietnamese and many more) and picks a matching voice.
 - 🧹 **Speaks like a person**: skips code blocks, URLs, tables and markdown symbols.
 - ⚡ **Never blocks**: speech runs in the background. A new reply cuts off the old one.
-- ✋ **Easy to interrupt**: press any key (Windows, edge voice) or send a new message and the speech stops at once.
 - 🔉 **Volume**: `READ_ALOUD_VOLUME` (0-100, default 50). Install `pip install miniaudio` for ~2 s faster start with the edge voice.
 
 | OS | Engine | Setup |
@@ -178,11 +189,19 @@ python -m unittest discover -s tests
 
 Claude Code와 **말로 대화하는** 무료 플러그인이에요. 말로 묻고(`/voice`), 답변을 소리로 들어요(speak-up).
 
+### ✋ 아무 키나 누르면 바로 멈춰요
+읽는 도중에 타자를 치기 시작하면 바로 조용해져요. 외울 단축키도, 입력할 명령어도 없어요.
+(Windows + edge 목소리) 새 메시지를 보내도 멈춰요.
+
+### 🌏 답변 언어에 맞춰 알아서 읽어요
+답변마다 언어를 알아내서 그 나라 목소리로 읽어요. 한국어, 영어, 일본어, 중국어, 스페인어, 아랍어, 힌디어, 태국어 등 40개 넘는 언어를 자동으로 알아내요. (언어를 지정하면 70개 이상)
+대화 중에 언어가 바뀌어도 목소리가 따라 바뀌어요. 따로 설정할 게 없어요.
+
+**그 밖에**
+
 - 운영체제에 들어있는 음성을 써서 API 키도, 비용도 필요 없어요. 인터넷이 없어도 돼요.
-- 답변 언어를 자동으로 알아내서 그 나라 목소리로 읽어요. 한국어, 영어, 일본어, 중국어, 스페인어, 아랍어, 힌디어, 태국어 등 전 세계 언어를 지원해요.
 - API 키나 계정이 필요 없어요. 기본 목소리는 PC 안에서만 동작하고, `edge` 목소리를 쓸 때만 답변 글이 Microsoft 서버로 가요.
 - 코드 블록, 링크, 표 기호는 빼고 문장만 읽어요.
-- 읽는 도중에 **아무 키나 누르거나** 새 메시지를 보내면 바로 멈춰요. (키 멈춤은 Windows + edge 목소리)
 - 음량은 `READ_ALOUD_VOLUME`(0~100, 기본 50). `pip install miniaudio`를 하면 edge 목소리가 약 2초 더 빨리 시작해요.
 
 **설치** (Claude Code 안에서 입력)
