@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""read-aloud: read Claude Code's final reply aloud, in any language, with free TTS.
+"""speak-up: read Claude Code's final reply aloud, in any language, with free TTS.
 
 Usage:
   speak.py hook            Called by the Claude Code Stop hook (reads JSON on stdin)
@@ -89,7 +89,7 @@ def save_setting(name: str, value: str) -> None:
         updated[key] = value
     STATE_DIR.mkdir(parents=True, exist_ok=True)
     CONFIG_FILE.write_text(json.dumps(updated, indent=2) + "\n", encoding="utf-8")
-    print(f"read-aloud: {key} = {value or '(removed)'}")
+    print(f"speak-up: {key} = {value or '(removed)'}")
 
 
 # ---------------------------------------------------------------- text cleanup
@@ -322,22 +322,22 @@ def main(argv: list[str]) -> int:
         try:
             run_hook()
         except Exception as exc:  # a TTS failure must never break the host app
-            print(f"read-aloud: {exc}", file=sys.stderr)
+            print(f"speak-up: {exc}", file=sys.stderr)
         print("{}")  # Codex requires JSON on stdout; Claude Code accepts it too
         return 0
     STATE_DIR.mkdir(parents=True, exist_ok=True)
     if cmd == "on":
         OFF_FLAG.unlink(missing_ok=True)
-        print("read-aloud: ON")
+        print("speak-up: ON")
     elif cmd == "off":
         OFF_FLAG.touch()
         stop_speaking()
-        print("read-aloud: OFF")
+        print("speak-up: OFF")
     elif cmd == "stop":
         stop_speaking()
-        print("read-aloud: stopped")
+        print("speak-up: stopped")
     elif cmd == "say":
-        speak(" ".join(argv[2:]) or "Hello from read aloud.")
+        speak(" ".join(argv[2:]) or "Hello from speak up.")
     elif cmd == "voices":
         list_voices()
     elif cmd == "set" and len(argv) >= 3:
@@ -350,7 +350,7 @@ def main(argv: list[str]) -> int:
         else:
             codex_setup.uninstall()
     elif cmd == "status":
-        print(f"read-aloud: {'OFF' if OFF_FLAG.exists() else 'ON'} | "
+        print(f"speak-up: {'OFF' if OFF_FLAG.exists() else 'ON'} | "
               f"engine={pick_engine()} voice={env('VOICE') or 'auto'} "
               f"rate={env('RATE', '0')} max_chars={env('MAX_CHARS', str(DEFAULT_MAX_CHARS))}")
     else:

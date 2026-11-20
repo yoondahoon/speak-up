@@ -1,14 +1,14 @@
 {
-  "name": "read-aloud",
+  "name": "speak-up",
   "owner": {
     "name": "yoondahoon"
   },
   "plugins": [
     {
-      "name": "read-aloud",
+      "name": "speak-up",
       "source": "./",
       "description": "Reads Claude Code's final reply aloud with free, offline system voices.",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "category": "productivity"
     }
   ],

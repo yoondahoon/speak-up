@@ -70,7 +70,91 @@ def resolve_voice(spec: str) -> str:
     return FALLBACK_VOICE
 
 
+DEFAULT_VOLUME = 0.5  # same as the PowerShell MediaPlayer default
+
+
+def playback_volume() -> float:
+    """READ_ALOUD_VOLUME as 0.0-1.0 (or 0-100); defaults to 0.5."""
+    raw = os.environ.get("READ_ALOUD_VOLUME", "").strip()
+    try:
+        value = float(raw) if raw else DEFAULT_VOLUME
+    except ValueError:
+        return DEFAULT_VOLUME
+    if value > 1:
+        value /= 100
+    return max(0.0, min(1.0, value))
+
+
+def scaled_samples(samples, volume: float):
+    """Return a new 16-bit sample array scaled by volume."""
+    from array import array  # noqa: PLC0415
+
+    return array("h", (int(s * volume) for s in samples))
+
+
+def sample_stream(samples, nchannels: int):
+    """miniaudio generator protocol: receives frame counts, yields sample chunks."""
+    pos = 0
+    frames = yield b""
+    while pos < len(samples):
+        end = pos + frames * nchannels
+        frames = yield samples[pos:end]
+        pos = end
+
+
+KEY_POLL_S = 0.05
+VK_FIRST, VK_LAST = 0x08, 0xFE  # every real key code, including mouse-free keys
+
+
+def wait_unless_key_pressed(seconds: float) -> None:
+    """Sleep for `seconds`, returning early if the user presses any key (Windows).
+
+    Disable with READ_ALOUD_STOP_ON_KEY=0.
+    """
+    if os.name != "nt" or os.environ.get("READ_ALOUD_STOP_ON_KEY", "1") == "0":
+        time.sleep(seconds)
+        return
+    import ctypes  # noqa: PLC0415
+
+    get_key = ctypes.windll.user32.GetAsyncKeyState
+    keys = [vk for vk in range(VK_FIRST, VK_LAST + 1) if vk not in (0x01, 0x02, 0x04)]
+    for vk in keys:  # clear "pressed since last call" bits left from before playback
+        get_key(vk)
+    deadline = time.monotonic() + seconds
+    while time.monotonic() < deadline:
+        if any(get_key(vk) & 0x8001 for vk in keys):
+            return
+        time.sleep(KEY_POLL_S)
+
+
+def play_in_process(mp3: Path) -> bool:
+    """Play with the optional `miniaudio` package; False when it is unavailable.
+
+    Starts in ~0.5 s, versus several seconds for spawning a PowerShell player.
+    """
+    try:
+        import miniaudio  # noqa: PLC0415
+    except ImportError:
+        return False
+    try:
+        sound = miniaudio.decode_file(str(mp3), output_format=miniaudio.SampleFormat.SIGNED16,
+                                      nchannels=2, sample_rate=44100)
+        samples = scaled_samples(sound.samples, playback_volume())
+        with miniaudio.PlaybackDevice(output_format=miniaudio.SampleFormat.SIGNED16,
+                                      nchannels=2, sample_rate=44100) as device:
+            stream = sample_stream(samples, nchannels=2)
+            next(stream)  # prime the generator before miniaudio sends frame counts
+            device.start(stream)
+            wait_unless_key_pressed(sound.duration + 0.3)
+        return True
+    except Exception as exc:  # no audio device, decode error, ...
+        print(f"speak-up: miniaudio failed ({exc}); using system player", file=sys.stderr)
+        return False
+
+
 def play(mp3: Path) -> None:
+    if play_in_process(mp3):
+        return
     if os.name == "nt":
         subprocess.run(["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass",
                         "-File", str(ROOT / "play.ps1"), "-File", str(mp3)])
@@ -116,7 +200,7 @@ def main() -> None:
             # SAPI-style rate (-10..10) mapped to edge's percentage (+/-100%)
             edge_tts.Communicate(text, voice, rate=f"{rate * 10:+d}%").save_sync(str(mp3))
         except Exception as exc:  # missing package, offline, service change
-            print(f"read-aloud: edge failed ({exc}); using system voice", file=sys.stderr)
+            print(f"speak-up: edge failed ({exc}); using system voice", file=sys.stderr)
             offline_fallback(text_file, voice, rate)
             return
         play(mp3)

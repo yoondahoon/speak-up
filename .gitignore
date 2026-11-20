@@ -1,3 +1,4 @@
 __pycache__/
 *.pyc
 GPT_REVIEW_REQUEST.md
+docs/CODEX_PROMPT.md

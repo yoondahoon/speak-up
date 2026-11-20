@@ -1,4 +1,6 @@
-# read-aloud
+# speak-up
+
+> Formerly `read-aloud`. Old links redirect here.
 
 **Talk to Claude Code and hear it answer, for free.** 🎙️ → 🤖 → 🔊
 
@@ -10,6 +12,8 @@ dictation and you get a hands-free voice conversation with no extra cost.
   Thai, Russian, Spanish, French, German, Vietnamese and many more) and picks a matching voice.
 - 🧹 **Speaks like a person**: skips code blocks, URLs, tables and markdown symbols.
 - ⚡ **Never blocks**: speech runs in the background. A new reply cuts off the old one.
+- ✋ **Easy to interrupt**: press any key (Windows, edge voice) or send a new message and the speech stops at once.
+- 🔉 **Volume**: `READ_ALOUD_VOLUME` (0-100, default 50). Install `pip install miniaudio` for ~2 s faster start with the edge voice.
 
 | OS | Engine | Setup |
 |---|---|---|
@@ -24,8 +28,8 @@ Requires **Python 3.9+**.
 In Claude Code:
 
 ```
-/plugin marketplace add yoondahoon/read-aloud
-/plugin install read-aloud@read-aloud
+/plugin marketplace add yoondahoon/speak-up
+/plugin install speak-up@speak-up
 ```
 
 Restart Claude Code. The next reply will be read aloud.
@@ -35,13 +39,13 @@ Restart Claude Code. The next reply will be read aloud.
 Codex supports the same kind of Stop hook. Run once:
 
 ```
-git clone https://github.com/yoondahoon/read-aloud
-python read-aloud/speak.py install-codex
+git clone https://github.com/yoondahoon/speak-up
+python speak-up/speak.py install-codex
 ```
 
 Then open Codex. It will say **"Hooks need review"**. Check that the command runs
-`read-aloud/speak.py hook`, and choose **Trust**. Codex replies are read aloud from then on.
-To remove it: `python read-aloud/speak.py uninstall-codex`.
+`speak-up/speak.py hook`, and choose **Trust**. Codex replies are read aloud from then on.
+To remove it: `python speak-up/speak.py uninstall-codex`.
 
 The installer only adds its own entry to `~/.codex/hooks.json` and keeps your other hooks.
 Keep the cloned folder where it is, because the hook points to it.
@@ -51,7 +55,7 @@ Keep the cloned folder where it is, because the hook points to it.
 1. Install the plugin (above) and restart Claude Code.
 2. Turn on voice input: `/voice tap`
 3. With the input box empty, **tap Space**, speak, then **tap Space again** to send.
-   Claude answers and read-aloud speaks the reply.
+   Claude answers and speak-up speaks the reply.
 
 > Tip: on Windows terminals use `tap` mode. `hold` mode may show the mic but not record.
 > Use earphones so the spoken reply is not picked up by the microphone.
@@ -59,11 +63,11 @@ Keep the cloned folder where it is, because the hook points to it.
 ## Usage
 
 ```
-/read-aloud:speak off      # stop reading replies
-/read-aloud:speak on       # start again
-/read-aloud:speak stop     # stop the current speech
-/read-aloud:speak status   # show settings
-/read-aloud:speak voices   # list installed voices
+/speak-up:speak off      # stop reading replies
+/speak-up:speak on       # start again
+/speak-up:speak stop     # stop the current speech
+/speak-up:speak status   # show settings
+/speak-up:speak voices   # list installed voices
 ```
 
 ### Voice input (`/voice`)
@@ -157,7 +161,7 @@ Clone the repo and add this to `~/.claude/settings.json`:
 {
   "hooks": {
     "Stop": [{ "hooks": [{ "type": "command",
-      "command": "bash /path/to/read-aloud/hooks/run.sh hook" }] }]
+      "command": "bash /path/to/speak-up/hooks/run.sh hook" }] }]
   }
 }
 ```
@@ -172,25 +176,27 @@ python -m unittest discover -s tests
 
 ## 한국어 안내
 
-Claude Code와 **말로 대화하는** 무료 플러그인이에요. 말로 묻고(`/voice`), 답변을 소리로 들어요(read-aloud).
+Claude Code와 **말로 대화하는** 무료 플러그인이에요. 말로 묻고(`/voice`), 답변을 소리로 들어요(speak-up).
 
 - 운영체제에 들어있는 음성을 써서 API 키도, 비용도 필요 없어요. 인터넷이 없어도 돼요.
 - 답변 언어를 자동으로 알아내서 그 나라 목소리로 읽어요. 한국어, 영어, 일본어, 중국어, 스페인어, 아랍어, 힌디어, 태국어 등 전 세계 언어를 지원해요.
 - API 키나 계정이 필요 없어요. 기본 목소리는 PC 안에서만 동작하고, `edge` 목소리를 쓸 때만 답변 글이 Microsoft 서버로 가요.
 - 코드 블록, 링크, 표 기호는 빼고 문장만 읽어요.
+- 읽는 도중에 **아무 키나 누르거나** 새 메시지를 보내면 바로 멈춰요. (키 멈춤은 Windows + edge 목소리)
+- 음량은 `READ_ALOUD_VOLUME`(0~100, 기본 50). `pip install miniaudio`를 하면 edge 목소리가 약 2초 더 빨리 시작해요.
 
 **설치** (Claude Code 안에서 입력)
 
 ```
-/plugin marketplace add yoondahoon/read-aloud
-/plugin install read-aloud@read-aloud
+/plugin marketplace add yoondahoon/speak-up
+/plugin install speak-up@speak-up
 ```
 
-**Codex에서 쓰기**: `git clone https://github.com/yoondahoon/read-aloud` 후 `python read-aloud/speak.py install-codex`를 실행하고, Codex를 열어 **"Hooks need review"**가 나오면 **Trust**를 누르세요.
+**Codex에서 쓰기**: `git clone https://github.com/yoondahoon/speak-up` 후 `python speak-up/speak.py install-codex`를 실행하고, Codex를 열어 **"Hooks need review"**가 나오면 **Trust**를 누르세요.
 
-**끄기/켜기**: `/read-aloud:speak off`, `/read-aloud:speak on`
+**끄기/켜기**: `/speak-up:speak off`, `/speak-up:speak on`
 
-**말로 묻기**: Claude Code에 내장된 `/voice tap`을 켜고, 입력창이 빈 상태에서 **스페이스바를 한 번 누르고 → 말하고 → 다시 한 번 누르면** 보내져요. (Windows에서는 `hold`보다 `tap`이 잘 돼요.) `/config`의 언어를 한국어로 해두면 한국어로 받아써요. read-aloud와 같이 쓰면 말로 묻고 소리로 답을 들을 수 있어요.
+**말로 묻기**: Claude Code에 내장된 `/voice tap`을 켜고, 입력창이 빈 상태에서 **스페이스바를 한 번 누르고 → 말하고 → 다시 한 번 누르면** 보내져요. (Windows에서는 `hold`보다 `tap`이 잘 돼요.) `/config`의 언어를 한국어로 해두면 한국어로 받아써요. speak-up과 같이 쓰면 말로 묻고 소리로 답을 들을 수 있어요.
 
 **더 자연스러운 목소리**: `pip install edge-tts` 후 설정에 `READ_ALOUD_ENGINE=edge`, 남자 목소리는 `READ_ALOUD_VOICE_KO=ko-KR-InJoonNeural`을 넣으세요. (인터넷 필요, 실패하면 기본 목소리로 자동 전환)
 

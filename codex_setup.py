@@ -1,4 +1,4 @@
-"""Install / remove the read-aloud Stop hook for OpenAI Codex (CLI and app).
+"""Install / remove the speak-up Stop hook for OpenAI Codex (CLI and app).
 
 Codex reads hooks from ~/.codex/hooks.json using the same shape as Claude Code, and passes
 `last_assistant_message` to Stop hooks. New hooks must be approved once inside Codex
@@ -10,7 +10,7 @@ import json
 import sys
 from pathlib import Path
 
-MARKER = "read-aloud"
+MARKERS = ("speak-up", "read-aloud")  # read-aloud = old name, still recognised
 HOOK_TIMEOUT_S = 15
 
 
@@ -23,11 +23,12 @@ def hook_command(script: Path) -> str:
 
 
 def _is_ours(handler: dict) -> bool:
-    return MARKER in str(handler.get("command", "")) and "speak.py" in str(handler.get("command", ""))
+    command = str(handler.get("command", ""))
+    return any(m in command for m in MARKERS) and "speak.py" in command
 
 
 def without_ours(config: dict) -> dict:
-    """Return a copy of the hooks config with every read-aloud Stop handler removed."""
+    """Return a copy of the hooks config with every speak-up Stop handler removed."""
     hooks = dict(config.get("hooks", {}))
     groups = []
     for group in hooks.get("Stop", []):
@@ -66,14 +67,14 @@ def _save(path: Path, data: dict) -> None:
 def install(script: Path) -> None:
     path = hooks_path()
     _save(path, with_ours(_load(path), hook_command(script)))
-    print(f"read-aloud: Codex hook added to {path}")
+    print(f"speak-up: Codex hook added to {path}")
     print("Next: open Codex. When it says 'Hooks need review', review the hook and choose Trust.")
 
 
 def uninstall() -> None:
     path = hooks_path()
     if not path.exists():
-        print("read-aloud: no Codex hooks file, nothing to remove")
+        print("speak-up: no Codex hooks file, nothing to remove")
         return
     _save(path, without_ours(_load(path)))
-    print(f"read-aloud: Codex hook removed from {path}")
+    print(f"speak-up: Codex hook removed from {path}")

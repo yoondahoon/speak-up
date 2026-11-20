@@ -6,5 +6,5 @@ for exe in python3 python py; do
     exec "$exe" "$DIR/speak.py" "$@"
   fi
 done
-echo "read-aloud: Python 3.9+ not found" >&2
+echo "speak-up: Python 3.9+ not found" >&2
 exit 0
