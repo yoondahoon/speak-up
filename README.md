@@ -2,7 +2,7 @@
 
 **Talk to Claude Code and hear it answer, for free.** 🎙️ → 🤖 → 🔊
 
-This Claude Code plugin reads every reply out loud. Combine it with Claude Code's built-in `/voice`
+This plugin reads every reply out loud. Works with **Claude Code** and **OpenAI Codex** (CLI and app). Combine it with Claude Code's built-in `/voice`
 dictation and you get a hands-free voice conversation with no extra cost.
 
 - 💸 **Free and offline**: uses the voices already built into your OS. No API key, no account.
@@ -17,7 +17,7 @@ dictation and you get a hands-free voice conversation with no extra cost.
 | macOS | `say` | Nothing. Download extra voices in System Settings → Accessibility → Spoken Content |
 | Linux | `espeak-ng` | `sudo apt install espeak-ng` |
 
-Requires **Python 3.8+**.
+Requires **Python 3.9+**.
 
 ## Install
 
@@ -29,6 +29,22 @@ In Claude Code:
 ```
 
 Restart Claude Code. The next reply will be read aloud.
+
+## Install for OpenAI Codex
+
+Codex supports the same kind of Stop hook. Run once:
+
+```
+git clone https://github.com/yoondahoon/read-aloud
+python read-aloud/speak.py install-codex
+```
+
+Then open Codex. It will say **"Hooks need review"**. Check that the command runs
+`read-aloud/speak.py hook`, and choose **Trust**. Codex replies are read aloud from then on.
+To remove it: `python read-aloud/speak.py uninstall-codex`.
+
+The installer only adds its own entry to `~/.codex/hooks.json` and keeps your other hooks.
+Keep the cloned folder where it is, because the hook points to it.
 
 ## Quick start: voice conversation in 3 steps
 
@@ -105,11 +121,17 @@ If no voice exists for a language, the system's default voice is used.
 | `READ_ALOUD_RATE` | `0` | Speed. SAPI/edge: `-10`..`10`. macOS `say`: words per minute |
 | `READ_ALOUD_MAX_CHARS` | `1200` | Longer replies are cut at a sentence boundary |
 
-You can set them in `~/.claude/settings.json`:
+Set them once for every app (Claude Code and Codex):
 
-```json
-{ "env": { "READ_ALOUD_RATE": "2" } }
 ```
+python speak.py set engine edge
+python speak.py set voice_ko ko-KR-InJoonNeural
+python speak.py set rate 2
+python speak.py set rate          # remove a setting
+```
+
+These go to `~/.claude/read-aloud/config.json`. The plugin also reads `READ_ALOUD_*` from the
+`env` block of `~/.claude/settings.json` and from real environment variables (highest priority).
 
 ### Optional: nicer neural voices (`edge`)
 
@@ -163,6 +185,8 @@ Claude Code와 **말로 대화하는** 무료 플러그인이에요. 말로 묻�
 /plugin marketplace add yoondahoon/read-aloud
 /plugin install read-aloud@read-aloud
 ```
+
+**Codex에서 쓰기**: `git clone https://github.com/yoondahoon/read-aloud` 후 `python read-aloud/speak.py install-codex`를 실행하고, Codex를 열어 **"Hooks need review"**가 나오면 **Trust**를 누르세요.
 
 **끄기/켜기**: `/read-aloud:speak off`, `/read-aloud:speak on`
 

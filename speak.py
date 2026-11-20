@@ -8,6 +8,9 @@ Usage:
   speak.py status          Show current settings
   speak.py say "text"      Speak arbitrary text (for testing)
   speak.py voices          List installed system voices
+  speak.py set NAME VALUE  Save a setting for all apps, e.g. `set voice_ko ko-KR-InJoonNeural`
+  speak.py install-codex   Add the Stop hook to OpenAI Codex (~/.codex/hooks.json)
+  speak.py uninstall-codex Remove it again
 
 Engines (READ_ALOUD_ENGINE): auto (default), sapi (Windows), say (macOS),
 espeak (Linux), edge (optional, needs `pip install edge-tts`, online).
@@ -41,8 +44,52 @@ IS_MAC = sys.platform == "darwin"
 
 
 
+CONFIG_FILE = STATE_DIR / "config.json"
+
+
+def _file_settings() -> dict:
+    """READ_ALOUD_* values from our config file, then from Claude Code's settings env.
+
+    Lets Codex (which does not load Claude's settings) use the same voice choices.
+    """
+    merged: dict = {}
+    claude = Path.home() / ".claude" / "settings.json"
+    for path in (claude, CONFIG_FILE):           # later file wins
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        source = data.get("env", {}) if path == claude else data
+        if isinstance(source, dict):
+            merged.update({k: str(v) for k, v in source.items() if k.startswith("READ_ALOUD_")})
+    return merged
+
+
+_SETTINGS_CACHE: dict | None = None
+
+
 def env(name: str, default: str = "") -> str:
-    return os.environ.get(f"READ_ALOUD_{name}", default).strip()
+    global _SETTINGS_CACHE
+    key = f"READ_ALOUD_{name}"
+    if key in os.environ:
+        return os.environ[key].strip()
+    if _SETTINGS_CACHE is None:
+        _SETTINGS_CACHE = _file_settings()
+    return _SETTINGS_CACHE.get(key, default).strip()
+
+
+def save_setting(name: str, value: str) -> None:
+    try:
+        data = json.loads(CONFIG_FILE.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        data = {}
+    key = "READ_ALOUD_" + name.upper().removeprefix("READ_ALOUD_")
+    updated = {k: v for k, v in data.items() if k != key}
+    if value:
+        updated[key] = value
+    STATE_DIR.mkdir(parents=True, exist_ok=True)
+    CONFIG_FILE.write_text(json.dumps(updated, indent=2) + "\n", encoding="utf-8")
+    print(f"read-aloud: {key} = {value or '(removed)'}")
 
 
 # ---------------------------------------------------------------- text cleanup
@@ -292,6 +339,15 @@ def main(argv: list[str]) -> int:
         speak(" ".join(argv[2:]) or "Hello from read aloud.")
     elif cmd == "voices":
         list_voices()
+    elif cmd == "set" and len(argv) >= 3:
+        save_setting(argv[2], " ".join(argv[3:]))
+    elif cmd in ("install-codex", "uninstall-codex"):
+        import codex_setup  # noqa: PLC0415
+
+        if cmd == "install-codex":
+            codex_setup.install(Path(__file__).resolve())
+        else:
+            codex_setup.uninstall()
     elif cmd == "status":
         print(f"read-aloud: {'OFF' if OFF_FLAG.exists() else 'ON'} | "
               f"engine={pick_engine()} voice={env('VOICE') or 'auto'} "
