@@ -22,8 +22,8 @@ SCRIPTS: dict[str, tuple[str, str, tuple[str, ...]]] = {
     "hangul": (r"[가-힣ᄀ-ᇿ]", "ko", ()),
     "kana": (r"[぀-ヿ]", "ja", ()),
     "han": (r"[一-鿿]", "zh", ("ja", "yue")),
-    "cyrillic": (r"[Ѐ-ӿ]", "ru", ("uk", "bg", "sr", "mk", "be", "kk", "mn", "ky")),
-    "arabic": (r"[؀-ۿݐ-ݿ]", "ar", ("fa", "ur", "ps")),
+    "cyrillic": (r"[Ѐ-ӿ]", "ru", ("be", "uk", "bg", "sr", "mk", "be", "kk", "mn", "ky")),
+    "arabic": (r"[؀-ۿݐ-ݿ]", "ar", ("ur", "fa", "ps")),
     "hebrew": (r"[֐-׿]", "he", ("yi",)),
     "greek": (r"[Ͱ-Ͽ]", "el", ()),
     "devanagari": (r"[ऀ-ॿ]", "hi", ("mr", "ne", "sa")),
@@ -46,6 +46,8 @@ SCRIPTS: dict[str, tuple[str, str, tuple[str, ...]]] = {
 LATIN = r"[A-Za-zÀ-ɏḀ-ỿ]"
 
 # Distinctive letters that point to one script variant / Latin language.
+# Order in SCRIPTS matters: a language whose markers are unique (be: ў, ur: ٹڈڑںے) is checked
+# before one whose markers it also uses (uk: і, fa: پچگ), so be/ur are not misread as uk/fa.
 SCRIPT_MARKERS = {"uk": "іїєґ", "be": "ў", "fa": "پچژگ", "ur": "ٹڈڑںے"}
 LATIN_MARKERS = {
     "es": "ñ¿¡", "fr": "çœàèêëîïûù", "de": "äöüß", "pt": "ãõ", "ro": "ășț",

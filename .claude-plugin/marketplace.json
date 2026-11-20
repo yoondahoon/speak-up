@@ -7,10 +7,10 @@
     {
       "name": "speak-up",
       "source": "./",
-      "description": "Reads Claude Code replies aloud with free voices. Press any key to stop; auto-detects 46 languages.",
+      "description": "Reads Claude Code replies aloud with free voices. Press any key to stop; auto-detects 48 languages.",
       "version": "0.4.0",
       "category": "productivity"
     }
   ],
-  "description": "Reads Claude Code replies aloud with free voices. Press any key to stop; auto-detects 46 languages."
+  "description": "Reads Claude Code replies aloud with free voices. Press any key to stop; auto-detects 48 languages."
 }
