@@ -24,7 +24,17 @@ DEFAULT_REGION = {
     "it": "IT", "nl": "NL", "ru": "RU", "sw": "KE", "ta": "IN", "ur": "PK", "bn": "IN",
     "ms": "MY", "ko": "KR", "ja": "JP", "hi": "IN", "fil": "PH", "tl": "PH",
 }
-FALLBACK_VOICE = "en-US-AriaNeural"
+FALLBACK_VOICE = "en-US-AndrewMultilingualNeural"
+# Smooth, natural default voice per language (override with READ_ALOUD_VOICE_<LANG>).
+PREFERRED = {
+    "ko": "ko-KR-InJoonNeural", "en": "en-US-AndrewMultilingualNeural",
+    "ja": "ja-JP-KeitaNeural", "zh": "zh-CN-YunxiNeural", "es": "es-ES-AlvaroNeural",
+    "fr": "fr-FR-RemyMultilingualNeural", "de": "de-DE-ChristophNeural",
+    "it": "it-IT-GiuseppeMultilingualNeural", "pt": "pt-BR-AntonioNeural",
+    "ru": "ru-RU-DmitryNeural", "vi": "vi-VN-NamMinhNeural", "th": "th-TH-NiwatNeural",
+    "id": "id-ID-ArdiNeural", "hi": "hi-IN-MadhurNeural", "ar": "ar-SA-HamedNeural",
+    "tr": "tr-TR-AhmetNeural", "nl": "nl-NL-MaartenNeural", "pl": "pl-PL-MarekNeural",
+}
 
 
 def list_voices() -> list[dict]:
@@ -59,6 +69,10 @@ def resolve_voice(spec: str) -> str:
     except Exception:  # offline: let synthesis fail and fall back
         return FALLBACK_VOICE
     wanted = lang if "-" in lang else f"{short}-{DEFAULT_REGION.get(short, '')}"
+    names = {v["ShortName"] for v in voices}
+    pref = PREFERRED.get(short, "")
+    if pref in names and ("-" not in lang or pref.lower().startswith(lang.lower() + "-")):
+        return pref
     # Single-language voices first: they sound most native.
     voices = sorted(voices, key=lambda v: "Multilingual" in v["ShortName"])
     for loc in (wanted, None):

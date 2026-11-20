@@ -12,7 +12,7 @@ Usage:
   speak.py install-codex   Add the Stop hook to OpenAI Codex (~/.codex/hooks.json)
   speak.py uninstall-codex Remove it again
 
-Engines (READ_ALOUD_ENGINE): auto (default), sapi (Windows), say (macOS),
+Engines (READ_ALOUD_ENGINE): auto (default: edge if edge-tts is installed, else the OS voice), sapi (Windows), say (macOS),
 espeak (Linux), edge (optional, needs `pip install edge-tts`, online).
 """
 from __future__ import annotations
@@ -192,10 +192,17 @@ def reply_from_hook_input(data: dict) -> str:
 
 # --------------------------------------------------------------------- engines
 
+def edge_available() -> bool:
+    import importlib.util  # noqa: PLC0415
+    return importlib.util.find_spec("edge_tts") is not None
+
+
 def pick_engine() -> str:
     choice = env("ENGINE", "auto").lower()
     if choice != "auto":
         return choice
+    if edge_available():          # smooth neural voices when edge-tts is installed
+        return "edge"
     if IS_WINDOWS:
         return "sapi"
     if IS_MAC:

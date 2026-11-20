@@ -170,7 +170,7 @@ If no voice exists for a language, the system's default voice is used.
 
 | Variable | Default | Meaning |
 |---|---|---|
-| `READ_ALOUD_ENGINE` | `auto` | `sapi`, `say`, `espeak`, or `edge` |
+| `READ_ALOUD_ENGINE` | `auto` | `auto` = `edge` when `edge-tts` is installed, else the OS voice. Or `sapi`, `say`, `espeak`, `edge` |
 | `READ_ALOUD_VOICE` | auto | Exact voice name, e.g. `Microsoft Heami Desktop` |
 | `READ_ALOUD_VOICE_KO` (`_EN`, `_ES`, any code) | auto | Voice for one language only, e.g. `ko-KR-InJoonNeural` |
 | `READ_ALOUD_LANG` | from `/config` | Fallback language when detection is unsure, e.g. `pt-BR` |
@@ -195,9 +195,9 @@ These go to `~/.claude/read-aloud/config.json`. The plugin also reads `READ_ALOU
 pip install edge-tts
 ```
 
-Then set `READ_ALOUD_ENGINE=edge`. Korean voices: `ko-KR-SunHiNeural` (female, default), `ko-KR-InJoonNeural` (male), `ko-KR-HyunsuMultilingualNeural` (male). If edge fails (offline, service change), it falls back to the system voice. This is free and needs no key, but it is **online** and uses
+That's it: once `edge-tts` is installed, `auto` uses it. Each language gets a smooth default voice (Korean `ko-KR-InJoonNeural`, English `en-US-AndrewMultilingualNeural`, Japanese `ja-JP-KeitaNeural`, Chinese `zh-CN-YunxiNeural`, Spanish `es-ES-AlvaroNeural`, French `fr-FR-RemyMultilingualNeural`, ...). Pick another with e.g. `READ_ALOUD_VOICE_KO=ko-KR-SunHiNeural`. To stay offline with edge-tts installed, set `READ_ALOUD_ENGINE=sapi` (or `say`/`espeak`). If edge fails (offline, service change), it falls back to the system voice. This is free and needs no key, but it is **online** and uses
 Microsoft Edge's Read Aloud service through the unofficial `edge-tts` package, so it may change or
-stop working at any time. The default engines stay fully offline.
+stop working at any time. Without `edge-tts` installed, everything stays fully offline.
 
 ## How it works
 
@@ -271,7 +271,7 @@ claude plugin install speak-up@speak-up
 
 **말로 묻기**: Claude Code에 내장된 `/voice tap`을 켜고, 입력창이 빈 상태에서 **스페이스바를 한 번 누르고 → 말하고 → 다시 한 번 누르면** 보내져요. (Windows에서는 `hold`보다 `tap`이 잘 돼요.) `/config`의 언어를 한국어로 해두면 한국어로 받아써요. speak-up과 같이 쓰면 말로 묻고 소리로 답을 들을 수 있어요.
 
-**더 자연스러운 목소리**: `pip install edge-tts` 후 설정에 `READ_ALOUD_ENGINE=edge`, 남자 목소리는 `READ_ALOUD_VOICE_KO=ko-KR-InJoonNeural`을 넣으세요. (인터넷 필요, 실패하면 기본 목소리로 자동 전환)
+**더 자연스러운 목소리**: `pip install edge-tts`만 하면 끝이에요. 자동으로 edge 목소리를 쓰고, 한국어는 인준(`ko-KR-InJoonNeural`), 다른 언어도 언어별로 부드러운 목소리를 골라요. 다른 목소리는 `READ_ALOUD_VOICE_KO=ko-KR-SunHiNeural`처럼 바꿀 수 있어요. (인터넷 필요, 실패하면 기본 목소리로 자동 전환)
 
 Windows에서 한국어 목소리가 안 나오면 설정 → 시간 및 언어 → 언어에서 **한국어 언어팩**을 설치하세요.
 
