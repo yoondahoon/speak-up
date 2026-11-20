@@ -321,8 +321,9 @@ def main(argv: list[str]) -> int:
     if cmd == "hook":
         try:
             run_hook()
-        except Exception as exc:  # a TTS failure must never break Claude Code
+        except Exception as exc:  # a TTS failure must never break the host app
             print(f"read-aloud: {exc}", file=sys.stderr)
+        print("{}")  # Codex requires JSON on stdout; Claude Code accepts it too
         return 0
     STATE_DIR.mkdir(parents=True, exist_ok=True)
     if cmd == "on":
