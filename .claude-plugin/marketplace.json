@@ -8,7 +8,7 @@
       "name": "speak-up",
       "source": "./",
       "description": "Reads Claude Code replies aloud with free voices. Press any key to stop; auto-detects 48 languages.",
-      "version": "0.4.1",
+      "version": "0.4.2",
       "category": "productivity"
     }
   ],

@@ -84,6 +84,8 @@ def resolve_voice(spec: str) -> str:
     return FALLBACK_VOICE
 
 
+SYNTH_TRIES = 3
+SYNTH_RETRY_DELAY_S = 0.3
 DEFAULT_VOLUME = 0.5  # same as the PowerShell MediaPlayer default
 
 
@@ -212,7 +214,14 @@ def main() -> None:
             voice = resolve_voice(spec)
             text = text_file.read_text(encoding="utf-8")
             # SAPI-style rate (-10..10) mapped to edge's percentage (+/-100%)
-            edge_tts.Communicate(text, voice, rate=f"{rate * 10:+d}%").save_sync(str(mp3))
+            for attempt in range(SYNTH_TRIES):  # the first connection after idle often drops
+                try:
+                    edge_tts.Communicate(text, voice, rate=f"{rate * 10:+d}%").save_sync(str(mp3))
+                    break
+                except Exception:
+                    if attempt == SYNTH_TRIES - 1:
+                        raise
+                    time.sleep(SYNTH_RETRY_DELAY_S)
         except Exception as exc:  # missing package, offline, service change
             print(f"speak-up: edge failed ({exc}); using system voice", file=sys.stderr)
             offline_fallback(text_file, voice, rate)
