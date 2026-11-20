@@ -1,6 +1,6 @@
 {
   "name": "read-aloud",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Reads Claude Code's final reply aloud with free, offline system voices (Windows SAPI, macOS say, Linux espeak). Auto-detects Korean, Japanese, Chinese and English.",
   "author": {
     "name": "yoondahoon"

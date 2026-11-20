@@ -50,6 +50,7 @@ The dictation language follows the `language` setting in `/config`.
 |---|---|---|
 | `READ_ALOUD_ENGINE` | `auto` | `sapi`, `say`, `espeak`, or `edge` |
 | `READ_ALOUD_VOICE` | auto | Exact voice name, e.g. `Microsoft Heami Desktop` |
+| `READ_ALOUD_VOICE_KO` (`_EN`, `_JA`, `_ZH`) | auto | Voice for one language only, e.g. `ko-KR-InJoonNeural` |
 | `READ_ALOUD_RATE` | `0` | Speed. SAPI/edge: `-10`..`10`. macOS `say`: words per minute |
 | `READ_ALOUD_MAX_CHARS` | `1200` | Longer replies are cut at a sentence boundary |
 
@@ -65,7 +66,7 @@ You can set them in `~/.claude/settings.json`:
 pip install edge-tts
 ```
 
-Then set `READ_ALOUD_ENGINE=edge`. This is free and needs no key, but it is **online** and uses
+Then set `READ_ALOUD_ENGINE=edge`. Korean voices: `ko-KR-SunHiNeural` (female, default), `ko-KR-InJoonNeural` (male), `ko-KR-HyunsuMultilingualNeural` (male). If edge fails (offline, service change), it falls back to the system voice. This is free and needs no key, but it is **online** and uses
 Microsoft Edge's Read Aloud service through the unofficial `edge-tts` package, so it may change or
 stop working at any time. The default engines stay fully offline.
 

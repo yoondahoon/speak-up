@@ -162,7 +162,8 @@ def pick_engine() -> str:
 
 
 def build_command(engine: str, text_file: Path, lang: str) -> list[str]:
-    voice, rate = env("VOICE"), env("RATE", "0")
+    voice = env(f"VOICE_{lang.upper()}") or env("VOICE")   # e.g. READ_ALOUD_VOICE_KO
+    rate = env("RATE", "0")
     if engine == "sapi":
         return ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File",
                 str(ROOT / "engines" / "sapi.ps1"), "-TextFile", str(text_file),
