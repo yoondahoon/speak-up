@@ -1,12 +1,19 @@
 {
   "name": "speak-up",
   "version": "0.4.0",
-  "description": "Reads Claude Code's final reply aloud with free, offline system voices (Windows SAPI, macOS say, Linux espeak). Auto-detects the reply language and picks a matching voice (70+ languages).",
+  "description": "Reads Claude Code's final reply aloud with free system voices (Windows SAPI, macOS say, Linux espeak; optional edge neural voices). Press any key to stop. Auto-detects 40+ reply languages and picks a matching voice (70+ with a language hint).",
   "author": {
     "name": "yoondahoon"
   },
   "homepage": "https://github.com/yoondahoon/speak-up",
   "repository": "https://github.com/yoondahoon/speak-up",
   "license": "MIT",
-  "keywords": ["tts", "text-to-speech", "voice", "accessibility", "korean", "hook"]
+  "keywords": [
+    "tts",
+    "text-to-speech",
+    "voice",
+    "accessibility",
+    "korean",
+    "hook"
+  ]
 }
