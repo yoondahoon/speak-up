@@ -4,6 +4,8 @@
 
 **Talk to Claude Code and hear it answer, for free.** 🎙️ → 🤖 → 🔊
 
+<p align="center"><img src="docs/demo.svg" width="760" alt="speak-up demo: a Korean reply is read in a Korean voice and stops when any key is pressed; a Spanish reply switches to a Spanish voice automatically"></p>
+
 This plugin reads every reply out loud. Works with **Claude Code** and **OpenAI Codex** (CLI and app). Combine it with Claude Code's built-in `/voice`
 dictation and you get a hands-free voice conversation with no extra cost.
 
