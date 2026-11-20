@@ -15,9 +15,30 @@ Just press any key while it is speaking (Windows, edge voice). Sending a new mes
 
 ### 🌏 Speaks your language automatically
 Every reply is checked for its language, and a matching native voice reads it: Korean, Japanese,
-Chinese, Arabic, Hindi, Thai, Russian, Spanish, French, German, Vietnamese: 40+ languages detected
-automatically, 70+ with a language hint (`READ_ALOUD_LANG`).
+Chinese, Arabic, Hindi, Thai, Russian, Spanish, French, German, Vietnamese: [46 languages](#-supported-languages) detected
+automatically, 63 with a language hint (`READ_ALOUD_LANG`).
 Switch languages mid-conversation and the voice follows. Nothing to configure.
+
+## 🌍 Supported languages
+
+**46 languages are detected automatically.** Write or ask in any of them and the reply is read in a matching voice.
+
+| Region | Languages |
+|---|---|
+| East Asia | 한국어 Korean · 日本語 Japanese · 中文 Chinese |
+| South Asia | हिन्दी Hindi · বাংলা Bengali · ਪੰਜਾਬੀ Punjabi · ગુજરાતી Gujarati · தமிழ் Tamil · తెలుగు Telugu · ಕನ್ನಡ Kannada · മലയാളം Malayalam · සිංහල Sinhala |
+| Southeast Asia | ไทย Thai · ລາວ Lao · မြန်မာ Burmese · ខ្មែរ Khmer · Tiếng Việt Vietnamese · Bahasa Indonesia · Tagalog |
+| Middle East | العربية Arabic · فارسی Persian · עברית Hebrew · Türkçe Turkish |
+| Europe | English · Español · Français · Deutsch · Italiano · Português · Nederlands · Svenska · Dansk · Norsk · Suomi · Íslenska · Polski · Čeština · Română · Magyar · Ελληνικά Greek · Русский Russian · Українська Ukrainian |
+| Caucasus | ქართული Georgian · Հայերեն Armenian |
+| Africa | Kiswahili Swahili · አማርኛ Amharic |
+
+**With a language hint** (`READ_ALOUD_LANG` or Claude Code's `language` setting), 17 more:
+Urdu, Marathi, Nepali, Sanskrit, Assamese, Pashto, Yiddish, Cantonese, Belarusian, Bulgarian, Serbian,
+Macedonian, Kazakh, Kyrgyz, Mongolian, Malay, Filipino.
+
+A voice must exist for the language: the `edge` engine has neural voices for about 75 languages;
+system engines use the voices installed on your OS. See [Languages](#languages) for details.
 
 ## Features
 
@@ -212,7 +233,7 @@ Claude Code와 **말로 대화하는** 무료 플러그인이에요. 말로 묻�
 (Windows + edge 목소리) 새 메시지를 보내도 멈춰요.
 
 ### 🌏 답변 언어에 맞춰 알아서 읽어요
-답변마다 언어를 알아내서 그 나라 목소리로 읽어요. 한국어, 영어, 일본어, 중국어, 스페인어, 아랍어, 힌디어, 태국어 등 40개 넘는 언어를 자동으로 알아내요. (언어를 지정하면 70개 이상)
+답변마다 언어를 알아내서 그 나라 목소리로 읽어요. 한국어, 영어, 일본어, 중국어, 스페인어, 아랍어, 힌디어, 태국어 등 46개 언어를 자동으로 알아내요. (언어를 지정하면 63개)
 대화 중에 언어가 바뀌어도 목소리가 따라 바뀌어요. 따로 설정할 게 없어요.
 
 **그 밖에**
@@ -221,6 +242,8 @@ Claude Code와 **말로 대화하는** 무료 플러그인이에요. 말로 묻�
 - API 키나 계정이 필요 없어요. 기본 목소리는 PC 안에서만 동작하고, `edge` 목소리를 쓸 때만 답변 글이 Microsoft 서버로 가요.
 - 코드 블록, 링크, 표 기호는 빼고 문장만 읽어요.
 - 음량은 `READ_ALOUD_VOLUME`(0~100, 기본 50). `pip install miniaudio`를 하면 edge 목소리가 약 2초 더 빨리 시작해요.
+
+**지원 언어**: 46개 언어를 자동으로 알아내요(한국어, 영어, 일본어, 중국어, 스페인어, 프랑스어, 독일어, 아랍어, 힌디어, 태국어, 베트남어, 러시아어 등). 언어를 지정하면 17개 더 돼요. 전체 목록은 [Supported languages](#-supported-languages)를 보세요.
 
 **설치** (Claude Code 안에서 입력)
 

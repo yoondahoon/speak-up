@@ -1,7 +1,7 @@
 {
   "name": "speak-up",
   "version": "0.4.0",
-  "description": "Reads Claude Code's final reply aloud with free system voices (Windows SAPI, macOS say, Linux espeak; optional edge neural voices). Press any key to stop. Auto-detects 40+ reply languages and picks a matching voice (70+ with a language hint).",
+  "description": "Reads Claude Code's final reply aloud with free system voices (Windows SAPI, macOS say, Linux espeak; optional edge neural voices). Press any key to stop. Auto-detects 46 reply languages and picks a matching voice (63 with a language hint).",
   "author": {
     "name": "yoondahoon"
   },
