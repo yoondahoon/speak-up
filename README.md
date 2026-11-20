@@ -1,8 +1,9 @@
 # read-aloud
 
-A Claude Code plugin.
+**Talk to Claude Code and hear it answer, for free.** 🎙️ → 🤖 → 🔊
 
-Have Claude Code **read its replies out loud**, for free.
+This Claude Code plugin reads every reply out loud. Combine it with Claude Code's built-in `/voice`
+dictation and you get a hands-free voice conversation with no extra cost.
 
 - 💸 **Free and offline**: uses the voices already built into your OS. No API key, no account.
 - 🌏 **Auto language**: picks a Korean, Japanese, Chinese or English voice based on the reply.
@@ -28,6 +29,16 @@ In Claude Code:
 
 Restart Claude Code. The next reply will be read aloud.
 
+## Quick start: voice conversation in 3 steps
+
+1. Install the plugin (above) and restart Claude Code.
+2. Turn on voice input: `/voice tap`
+3. With the input box empty, **tap Space**, speak, then **tap Space again** to send.
+   Claude answers and read-aloud speaks the reply.
+
+> Tip: on Windows terminals use `tap` mode. `hold` mode may show the mic but not record.
+> Use earphones so the spoken reply is not picked up by the microphone.
+
 ## Usage
 
 ```
@@ -38,11 +49,17 @@ Restart Claude Code. The next reply will be read aloud.
 /read-aloud:speak voices   # list installed voices
 ```
 
-### Talk both ways
+### Voice input (`/voice`)
 
-Claude Code has built-in push-to-talk dictation. Type `/voice`, then **hold Space** and speak.
-Together with read-aloud you can ask by voice and hear the answer.
-The dictation language follows the `language` setting in `/config`.
+Voice input is Claude Code's own feature, not part of this plugin.
+
+```
+/voice tap    # tap Space to start, tap again to send (recommended)
+/voice hold   # hold Space while speaking
+/voice off
+```
+
+The dictation language follows the `language` setting in `/config` (e.g. `korean`).
 
 ## Settings (environment variables)
 
@@ -99,7 +116,7 @@ python -m unittest discover -s tests
 
 ## 한국어 안내
 
-Claude Code의 답변을 **무료로 소리 내어 읽어주는** 플러그인이에요.
+Claude Code와 **말로 대화하는** 무료 플러그인이에요. 말로 묻고(`/voice`), 답변을 소리로 들어요(read-aloud).
 
 - 운영체제에 들어있는 음성을 써서 API 키도, 비용도 필요 없어요. 인터넷이 없어도 돼요.
 - 답변이 한국어면 한국어 목소리로, 영어면 영어 목소리로 자동으로 읽어요.
@@ -114,7 +131,9 @@ Claude Code의 답변을 **무료로 소리 내어 읽어주는** 플러그인�
 
 **끄기/켜기**: `/read-aloud:speak off`, `/read-aloud:speak on`
 
-**말로 묻기**: Claude Code에 내장된 `/voice`를 켜고 **스페이스바를 누른 채** 말하세요. `/config`의 언어를 한국어로 해두면 한국어로 받아써요. read-aloud와 같이 쓰면 말로 묻고 소리로 답을 들을 수 있어요.
+**말로 묻기**: Claude Code에 내장된 `/voice tap`을 켜고, 입력창이 빈 상태에서 **스페이스바를 한 번 누르고 → 말하고 → 다시 한 번 누르면** 보내져요. (Windows에서는 `hold`보다 `tap`이 잘 돼요.) `/config`의 언어를 한국어로 해두면 한국어로 받아써요. read-aloud와 같이 쓰면 말로 묻고 소리로 답을 들을 수 있어요.
+
+**더 자연스러운 목소리**: `pip install edge-tts` 후 설정에 `READ_ALOUD_ENGINE=edge`, 남자 목소리는 `READ_ALOUD_VOICE_KO=ko-KR-InJoonNeural`을 넣으세요. (인터넷 필요, 실패하면 기본 목소리로 자동 전환)
 
 Windows에서 한국어 목소리가 안 나오면 설정 → 시간 및 언어 → 언어에서 **한국어 언어팩**을 설치하세요.
 
