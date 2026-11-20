@@ -1,0 +1,16 @@
+{
+  "name": "read-aloud",
+  "owner": {
+    "name": "yoondahoon"
+  },
+  "plugins": [
+    {
+      "name": "read-aloud",
+      "source": "./",
+      "description": "Reads Claude Code's final reply aloud with free, offline system voices.",
+      "version": "0.1.0",
+      "category": "productivity"
+    }
+  ],
+  "description": "Read Claude Code replies aloud with free, offline system voices."
+}
