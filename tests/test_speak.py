@@ -27,10 +27,10 @@ class CleanMarkdownTest(unittest.TestCase):
 
 class LanguageAndTruncateTest(unittest.TestCase):
     def test_detects_korean(self) -> None:
-        self.assertEqual(speak.detect_lang("안녕하세요 반갑습니다 hello"), "ko")
+        self.assertEqual(speak.langdetect.detect_lang("안녕하세요 반갑습니다 hello"), "ko")
 
     def test_defaults_to_english(self) -> None:
-        self.assertEqual(speak.detect_lang("Hello world"), "en")
+        self.assertEqual(speak.langdetect.detect_lang("Hello world"), "en")
 
     def test_truncate_cuts_at_sentence(self) -> None:
         text = "First sentence here. Second sentence is longer than the limit allows."

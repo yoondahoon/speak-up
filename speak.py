@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""read-aloud: read Claude Code's final reply aloud using free, built-in TTS.
+"""read-aloud: read Claude Code's final reply aloud, in any language, with free TTS.
 
 Usage:
   speak.py hook            Called by the Claude Code Stop hook (reads JSON on stdin)
@@ -25,6 +25,9 @@ import tempfile
 import time
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import lang as langdetect  # noqa: E402
+
 ROOT = Path(__file__).resolve().parent
 STATE_DIR = Path.home() / ".claude" / "read-aloud"
 OFF_FLAG = STATE_DIR / "off"
@@ -36,9 +39,6 @@ TRANSCRIPT_RETRY_DELAY_S = 0.3
 IS_WINDOWS = os.name == "nt"
 IS_MAC = sys.platform == "darwin"
 
-EDGE_VOICES = {"ko": "ko-KR-SunHiNeural", "ja": "ja-JP-NanamiNeural",
-               "zh": "zh-CN-XiaoxiaoNeural", "en": "en-US-AriaNeural"}
-MAC_VOICES = {"ko": "Yuna", "ja": "Kyoko", "zh": "Tingting", "en": "Samantha"}
 
 
 def env(name: str, default: str = "") -> str:
@@ -91,13 +91,8 @@ def truncate(text: str, max_chars: int) -> str:
 
 
 def detect_lang(text: str) -> str:
-    counts = {
-        "ko": len(re.findall(r"[가-힣]", text)),
-        "ja": len(re.findall(r"[぀-ヿ]", text)),
-        "zh": len(re.findall(r"[一-鿿]", text)),
-    }
-    lang, n = max(counts.items(), key=lambda kv: kv[1])
-    return lang if n >= 5 else "en"
+    hint = env("LANG") or langdetect.claude_language_setting()
+    return langdetect.detect_lang(text, hint)
 
 
 # ------------------------------------------------------------ reading the reply
@@ -162,22 +157,46 @@ def pick_engine() -> str:
 
 
 def build_command(engine: str, text_file: Path, lang: str) -> list[str]:
-    voice = env(f"VOICE_{lang.upper()}") or env("VOICE")   # e.g. READ_ALOUD_VOICE_KO
+    short = langdetect.base(lang)
+    voice = env(f"VOICE_{short.upper()}") or env("VOICE")   # e.g. READ_ALOUD_VOICE_KO
     rate = env("RATE", "0")
     if engine == "sapi":
         return ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File",
                 str(ROOT / "engines" / "sapi.ps1"), "-TextFile", str(text_file),
                 "-Lang", lang, "-Rate", rate, "-Voice", voice]
     if engine == "say":
-        cmd = ["say", "-f", str(text_file), "-v", voice or MAC_VOICES.get(lang, "Samantha")]
+        voice = voice or mac_voice(lang)
+        cmd = ["say", "-f", str(text_file)] + (["-v", voice] if voice else [])
         return cmd + (["-r", rate] if rate not in ("", "0") else [])
     if engine == "espeak":
         exe = shutil.which("espeak-ng") or shutil.which("espeak") or "espeak-ng"
-        return [exe, "-v", voice or lang, "-f", str(text_file)]
+        return [exe, "-v", voice or lang.lower(), "-f", str(text_file)]
     if engine == "edge":
         return [sys.executable, str(ROOT / "engines" / "edge.py"), str(text_file),
-                voice or EDGE_VOICES.get(lang, EDGE_VOICES["en"]), rate]
+                voice or f"auto:{lang}", rate]
     raise ValueError(f"unknown engine: {engine}")
+
+
+def mac_voice(lang: str) -> str:
+    """Pick an installed macOS voice whose locale matches, e.g. 'ko' -> 'Yuna'."""
+    try:
+        out = subprocess.run(["say", "-v", "?"], capture_output=True, text=True,
+                             timeout=5).stdout
+    except (OSError, subprocess.SubprocessError):
+        return ""
+    want = lang.replace("-", "_").lower()
+    matches = []
+    for line in out.splitlines():
+        m = re.match(r"^(.+?)\s{2,}([a-z]{2,3}_[A-Z0-9]{2,3})\s", line)
+        if m:
+            matches.append((m.group(1).strip(), m.group(2).lower()))
+    for name, loc in matches:
+        if loc == want:
+            return name
+    for name, loc in matches:
+        if loc.split("_")[0] == langdetect.base(lang):
+            return name
+    return ""
 
 
 def stop_speaking() -> None:
