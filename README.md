@@ -2,7 +2,7 @@
 
 > Formerly `read-aloud`. Old links redirect here. Already using it? See [Upgrading from read-aloud](#upgrading-from-read-aloud).
 
-**Talk to Claude Code and hear it answer, for free.** 🎙️ → 🤖 → 🔊
+**Talk to Claude, no typing.** Ask with your voice, hear the reply. Free. 🎙️ → 🤖 → 🔊
 
 <p align="center"><img src="docs/demo.svg" width="760" alt="speak-up demo: a Korean reply is read in a Korean voice and stops when any key is pressed; a Spanish reply switches to a Spanish voice automatically"></p>
 
@@ -228,7 +228,7 @@ python -m unittest discover -s tests
 
 ## 한국어 안내
 
-Claude Code와 **말로 대화하는** 무료 플러그인이에요. 말로 묻고(`/voice`), 답변을 소리로 들어요(speak-up).
+**타이핑 없이 Claude와 대화하세요.** Claude Code와 말로 대화하는 무료 플러그인이에요. 말로 묻고(`/voice`), 답변을 소리로 들어요(speak-up).
 
 ### ✋ 아무 키나 누르면 바로 멈춰요
 읽는 도중에 타자를 치기 시작하면 바로 조용해져요. 외울 단축키도, 입력할 명령어도 없어요.
